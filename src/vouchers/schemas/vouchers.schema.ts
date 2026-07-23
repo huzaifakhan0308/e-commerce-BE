@@ -5,8 +5,11 @@ export type VouchersDocument = Vouchers & Document;
 
 @Schema({ timestamps: true })
 export class Vouchers {
-  @Prop({ required: true })
-  imageUrl: string;
+  @Prop()
+  image: string;
+
+  @Prop()
+  imageType: string;
 }
 
 export const VouchersSchema = SchemaFactory.createForClass(Vouchers);

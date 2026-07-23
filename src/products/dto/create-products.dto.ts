@@ -1,17 +1,18 @@
 import { IsString, IsNumber, IsArray, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
 
-export class CreateProductDto {
+export class CreateProductsDto {
   @IsString()
   name: string;
 
+  @Type(() => Number)
   @IsNumber()
   price: number;
 
+  @Type(() => Number)
   @IsNumber()
+  @IsOptional()
   discountPrice: number;
-
-  @IsString()
-  imageUrls: string[];
 
   @IsArray()
   colors: string[];

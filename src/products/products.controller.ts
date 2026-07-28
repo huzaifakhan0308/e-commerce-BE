@@ -14,10 +14,10 @@ export class ProductsController {
     return this.productsService.create(createProductDto, files);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.productsService.findAll();
-  // }
+  @Get()
+  findAll() {
+    return this.productsService.findAll();
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

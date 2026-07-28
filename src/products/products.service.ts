@@ -25,9 +25,9 @@ export class ProductsService {
   return created.save();
 }
 
-  async findAll(): Promise<Products[]> {
-    return this.productsModel.find().exec();
-  }
+  // async findAll(): Promise<Products[]> {
+  //   return this.productsModel.find().exec();
+  // }
 
   async findOne(id: string): Promise<Products> {
     const products = await this.productsModel.findById(id).exec();

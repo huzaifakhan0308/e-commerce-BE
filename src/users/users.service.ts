@@ -41,8 +41,8 @@ export class UsersService {
     return updated;
   }
 
-async updateProfile(userId: string, dto: UpdateProfileDto) {
-  const user = await this.userModel.findById(userId);
+async updateProfile(_id: string, dto: UpdateProfileDto) {
+  const user = await this.userModel.findById(_id);
   if (!user) {
     throw new BadRequestException('User not found');
   }

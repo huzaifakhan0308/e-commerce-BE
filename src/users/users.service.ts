@@ -4,6 +4,9 @@ import { Model } from 'mongoose';
 import { Users, UsersDocument } from './schemas/users.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { UpdateProfileDto } from './dto/updateProfile.dto';
 
 @Injectable()
 export class UsersService {
@@ -37,6 +40,34 @@ export class UsersService {
     }
     return updated;
   }
+
+async updateProfile(userId: string, dto: UpdateProfileDto) {
+  const user = await this.userModel.findById(userId);
+  if (!user) {
+    throw new BadRequestException('User not found');
+  }
+
+  if (dto.newPassword) {
+    if (!dto.currentPassword) {
+      throw new BadRequestException('Current password is required to set a new password');
+    }
+    const matches = await bcrypt.compare(dto.currentPassword, user.password);
+    if (!matches) {
+      throw new UnauthorizedException('Current password is incorrect');
+    }
+    user.password = await bcrypt.hash(dto.newPassword, 10);
+  }
+
+  if (dto.firstName !== undefined) user.firstName = dto.firstName;
+  if (dto.lastName !== undefined) user.lastName = dto.lastName;
+  if (dto.email !== undefined) user.email = dto.email;
+  if (dto.address !== undefined) user.address = dto.address;
+
+  await user.save();
+
+  const { password, ...safeUser } = user.toObject();
+  return safeUser;
+}
 
   async remove(id: string): Promise<Users> {
     const deleted = await this.userModel.findByIdAndDelete(id).exec();

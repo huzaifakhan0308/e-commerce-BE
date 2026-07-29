@@ -32,16 +32,17 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('me')
+  updateMe(@Req() req, @Body() dto: UpdateProfileDto) {
+    return this.usersService.updateProfile(req.user.userId, dto);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Patch('me')
-  updateMe(@Req() req, @Body() dto: UpdateProfileDto) {
-    return this.usersService.updateProfile(req.user.sub, dto);
-  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

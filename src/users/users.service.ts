@@ -41,12 +41,13 @@ export class UsersService {
     return updated;
   }
 
-async updateProfile(_id: string, dto: UpdateProfileDto) {
-  const user = await this.userModel.findById(_id);
+async updateProfile(sub: string, dto: UpdateProfileDto) {
+  const user = await this.userModel.findById(sub);
+
   if (!user) {
     throw new BadRequestException('User not found');
   }
-
+  
   if (dto.newPassword) {
     if (!dto.currentPassword) {
       throw new BadRequestException('Current password is required to set a new password');
@@ -57,6 +58,7 @@ async updateProfile(_id: string, dto: UpdateProfileDto) {
     }
     user.password = await bcrypt.hash(dto.newPassword, 10);
   }
+
 
   if (dto.firstName !== undefined) user.firstName = dto.firstName;
   if (dto.lastName !== undefined) user.lastName = dto.lastName;

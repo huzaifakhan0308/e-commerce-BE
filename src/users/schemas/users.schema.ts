@@ -8,11 +8,13 @@ export class Users {
   @Prop({ required: true })
   firstName: string;
   
+  @Prop()
   lastName: string;
   
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   email: string;
   
+  @Prop()
   address: string;
   
   @Prop({ required: true })
